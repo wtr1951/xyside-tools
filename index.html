@@ -1,0 +1,1404 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="XySide Smart Image Compressor & EXIF Wiper compresses PNG, JPG, and WebP files locally in your browser while stripping sensitive EXIF and GPS metadata.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://tools.xyside.com/">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7466854383553853" crossorigin="anonymous"></script>
+  <title>XySide Smart Image Compressor &amp; EXIF Wiper</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --line: #e5e7eb;
+      --blue: #2563eb;
+      --blue-deep: #1d4ed8;
+      --green: #059669;
+      --green-soft: rgba(5, 150, 105, 0.14);
+      --shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+      --transition: 180ms ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.11), transparent 30%),
+        radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 24%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 250, 250, 1));
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .page-shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding-bottom: 48px;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 20px 0;
+      background: rgba(250, 250, 250, 0.92);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--blue), #60a5fa);
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.25);
+    }
+
+    .site-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-link {
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: var(--muted);
+      transition: background var(--transition), color var(--transition), transform var(--transition);
+    }
+
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      color: var(--blue);
+      background: rgba(37, 99, 235, 0.08);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 28px;
+      padding: 36px 0 28px;
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-card {
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: 36px;
+    }
+
+    .hero-card {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -30% -30% auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.18), transparent 62%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.08);
+      color: var(--blue);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    h1 {
+      margin: 18px 0 16px;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+    }
+
+    .hero-copy p {
+      margin: 0;
+      max-width: 64ch;
+      font-size: 1.06rem;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .metric {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--blue);
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .security-panel {
+      border: 1px solid rgba(37, 99, 235, 0.16);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(239, 246, 255, 0.94));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .security-panel h2 {
+      margin: 0 0 12px;
+      font-size: 1.2rem;
+      letter-spacing: -0.03em;
+    }
+
+    .security-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .security-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .security-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(37, 99, 235, 0.14);
+      background: rgba(255, 255, 255, 0.86);
+    }
+
+    .security-item strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 0.98rem;
+    }
+
+    .security-item span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .symbol {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--blue);
+      flex: 0 0 auto;
+    }
+
+    .workbench {
+      margin-top: 18px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .trust-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(5, 150, 105, 0.18);
+      background: rgba(255, 255, 255, 0.95);
+      color: #047857;
+      box-shadow:
+        0 0 0 1px rgba(16, 185, 129, 0.06),
+        0 0 24px rgba(34, 197, 94, 0.08);
+      font-size: 0.94rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .dropzone,
+    .studio-shell,
+    .feature-strip,
+    .site-footer {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .dropzone {
+      position: relative;
+      overflow: hidden;
+      min-height: 320px;
+      padding: 28px;
+      border-style: dashed;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition), opacity var(--transition);
+    }
+
+    .dropzone::before {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(37, 99, 235, 0.03), rgba(37, 99, 235, 0.01));
+      pointer-events: none;
+    }
+
+    .dropzone.dragover {
+      transform: translateY(-2px) scale(1.004);
+      border-color: rgba(37, 99, 235, 0.45);
+      box-shadow: 0 30px 60px rgba(37, 99, 235, 0.16);
+    }
+
+    .dropzone.hidden,
+    .studio-shell.hidden {
+      display: none;
+    }
+
+    .drop-content {
+      position: relative;
+      z-index: 1;
+      max-width: 560px;
+    }
+
+    .upload-icon {
+      width: 92px;
+      height: 92px;
+      margin: 0 auto 22px;
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--blue), #60a5fa);
+      box-shadow: 0 24px 48px rgba(37, 99, 235, 0.28);
+    }
+
+    .drop-content h2 {
+      margin: 0 0 12px;
+      font-family: "Space Grotesk", "Segoe UI", sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.3rem);
+      letter-spacing: -0.04em;
+    }
+
+    .drop-content p {
+      margin: 0 auto;
+      max-width: 58ch;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .drop-actions {
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .primary-button,
+    .secondary-button,
+    .format-button {
+      border: 0;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 56px;
+      padding: 16px 22px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--blue), #3b82f6);
+      color: #ffffff;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
+    }
+
+    .primary-button:hover,
+    .primary-button:focus-visible {
+      background: linear-gradient(135deg, var(--blue-deep), #2563eb);
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(29, 78, 216, 0.24);
+      outline: none;
+    }
+
+    .primary-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .secondary-button,
+    .format-button {
+      min-height: 48px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .secondary-button:hover,
+    .secondary-button:focus-visible,
+    .format-button:hover,
+    .format-button:focus-visible {
+      border-color: rgba(37, 99, 235, 0.28);
+      color: var(--blue);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .format-button.is-active {
+      border-color: rgba(37, 99, 235, 0.32);
+      background: rgba(37, 99, 235, 0.08);
+      color: var(--blue);
+      box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.08);
+    }
+
+    .studio-shell {
+      padding: 20px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .control-card,
+    .status-card,
+    .comparison-card,
+    .feature-card {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+    }
+
+    .control-card {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .control-card h3,
+    .comparison-card h3,
+    .feature-card h3 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .control-card p,
+    .comparison-card p,
+    .feature-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .toggle-label {
+      display: grid;
+      gap: 6px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      width: 68px;
+      height: 38px;
+      flex: 0 0 auto;
+    }
+
+    .switch input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .switch-track {
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      background: #cbd5e1;
+      transition: background var(--transition), box-shadow var(--transition);
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.05);
+    }
+
+    .switch-knob {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.16);
+      transition: transform var(--transition);
+    }
+
+    .switch input:checked + .switch-track {
+      background: linear-gradient(135deg, var(--green), #34d399);
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.18);
+    }
+
+    .switch input:checked ~ .switch-knob {
+      transform: translateX(30px);
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .slider-row input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+      cursor: pointer;
+    }
+
+    .quality-chip {
+      min-width: 78px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(37, 99, 235, 0.08);
+      color: var(--blue);
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .format-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .format-hint {
+      min-height: 24px;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .file-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .file-name {
+      font-weight: 800;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .status-card {
+      padding: 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .savings-banner {
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: rgba(5, 150, 105, 0.08);
+      color: var(--green);
+      font-size: clamp(1.15rem, 2vw, 1.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .savings-banner.is-neutral {
+      background: rgba(37, 99, 235, 0.08);
+      color: var(--blue);
+    }
+
+    .processing-state {
+      display: none;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(37, 99, 235, 0.06);
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .processing-state.is-visible {
+      display: block;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .comparison-card {
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .preview-frame {
+      min-height: 320px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(45deg, rgba(226, 232, 240, 0.6) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(226, 232, 240, 0.6) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(226, 232, 240, 0.6) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(226, 232, 240, 0.6) 75%);
+      background-size: 24px 24px;
+      background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .preview-frame img {
+      width: 100%;
+      height: 100%;
+      max-height: 420px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .preview-placeholder {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .panel-stat {
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .download-button {
+      min-width: min(100%, 420px);
+      min-height: 62px;
+      padding: 18px 24px;
+      border-radius: 18px;
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.18);
+    }
+
+    .action-note {
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .feature-strip {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .feature-card {
+      padding: 22px;
+    }
+
+    .site-footer {
+      margin-top: 18px;
+      padding: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-link {
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .footer-link:hover,
+    .footer-link:focus-visible {
+      background: rgba(37, 99, 235, 0.08);
+      color: var(--blue);
+      outline: none;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .control-grid,
+      .comparison-grid,
+      .feature-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy,
+      .hero-card,
+      .dropzone,
+      .studio-shell,
+      .site-footer {
+        border-radius: 24px;
+      }
+
+      .hero-copy {
+        padding: 28px;
+      }
+
+      .metric strong {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page-shell {
+        width: min(100% - 20px, 1180px);
+      }
+
+      .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .hero-copy,
+      .hero-card,
+      .dropzone,
+      .studio-shell,
+      .site-footer {
+        border-radius: 22px;
+      }
+
+      .hero-metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .dropzone {
+        min-height: 280px;
+        padding: 22px;
+      }
+
+      .preview-frame {
+        min-height: 240px;
+      }
+
+      .action-row,
+      .file-meta,
+      .toggle-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .download-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="https://xyside.com/" aria-label="Go to XySide home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 12.75L10 18.75L20 5.25" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>XySide Smart Image Compressor &amp; EXIF Wiper</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a class="nav-link" href="https://xyside.com/">Home / Dashboard</a>
+        <a class="nav-link" href="https://xyside.com/privacy.html">Privacy Policy</a>
+        <a class="nav-link" href="https://xyside.com/terms.html">Terms of Service</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <span class="eyebrow">Zero-Trust Image Utility</span>
+          <h1 id="hero-title">Compress Images. Wipe Photo Privacy. Zero Server Uploads.</h1>
+          <p>XySide uses browser-level HTML5 Canvas and WASM technology to shrink your PNG/JPG/WebP files by up to 90% and instantly strip GPS coordinates and metadata. Your files never touch a server. 100% processed locally in your browser for absolute data sovereignty.</p>
+          <div class="hero-metrics" aria-label="Performance highlights">
+            <div class="metric">
+              <strong>Up to 90%</strong>
+              <span>Compression savings when you switch to modern export formats like WebP.</span>
+            </div>
+            <div class="metric">
+              <strong>0 Uploads</strong>
+              <span>Every transform runs locally through browser APIs without server transit.</span>
+            </div>
+            <div class="metric">
+              <strong>Instant EXIF Wipe</strong>
+              <span>Canvas re-encoding removes GPS and camera metadata by design.</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="hero-card">
+          <div class="security-panel">
+            <h2>Built for privacy-first creators, operators, and security teams.</h2>
+            <p>Use a local browser sandbox instead of risky upload-and-wait workflows. Clean image metadata, optimize byte size, and export the final file straight to disk.</p>
+            <div class="security-list">
+              <div class="security-item">
+                <div class="symbol" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3L19 6V11.25C19 15.67 16.01 19.77 12 21C7.99 19.77 5 15.67 5 11.25V6L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <strong>No backend risk surface</strong>
+                  <span>There is nothing to upload, queue, or breach on the server side.</span>
+                </div>
+              </div>
+              <div class="security-item">
+                <div class="symbol" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 7H20M7 3V7M17 3V7M6 11H18M8 15H12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <strong>Metadata stripped on export</strong>
+                  <span>GPS, camera model, and timestamp traces are removed during local re-render.</span>
+                </div>
+              </div>
+              <div class="security-item">
+                <div class="symbol" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M13 3L4 14H11L10 21L20 9H13L13 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <strong>Sub-second refresh loop</strong>
+                  <span>Debounced re-compression keeps the comparison board responsive while you tune quality.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="workbench" aria-label="Image optimization workbench">
+        <div class="badge-row" aria-label="Trust badges">
+          <span class="trust-badge">🔒 100% Local Processing</span>
+          <span class="trust-badge">📍 EXIF &amp; GPS Auto-Stripped</span>
+          <span class="trust-badge">🚀 Powered by HTML5 WebAPI</span>
+        </div>
+
+        <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="Upload your image">
+          <div class="drop-content">
+            <div class="upload-icon" aria-hidden="true">
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none">
+                <path d="M12 16V6M12 6L8 10M12 6L16 10M4 18.5H20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h2>Drop a PNG, JPG, or WebP into the secure local sandbox.</h2>
+            <p>Drag and drop an image here or choose one from disk. XySide will open a real-time optimization console without sending a single byte away from your browser.</p>
+            <div class="drop-actions">
+              <button id="selectButton" class="primary-button" type="button">Choose Secure Source Image</button>
+              <button id="dropHintButton" class="secondary-button" type="button">Drag files directly here</button>
+            </div>
+          </div>
+          <input id="fileInput" class="sr-only" type="file" accept="image/png,image/jpeg,image/webp">
+        </div>
+
+        <div id="studio" class="studio-shell hidden">
+          <div class="control-grid">
+            <section class="control-card" aria-labelledby="metadata-title">
+              <div class="toggle-row">
+                <div class="toggle-label">
+                  <h3 id="metadata-title">Strip Metadata (GPS, Camera Model, Timestamp)</h3>
+                  <p>Enabled by default to export a privacy-clean image through the browser canvas pipeline.</p>
+                </div>
+                <label class="switch" aria-label="Toggle metadata stripping">
+                  <input id="metadataToggle" type="checkbox" checked>
+                  <span class="switch-track" aria-hidden="true"></span>
+                  <span class="switch-knob" aria-hidden="true"></span>
+                </label>
+              </div>
+            </section>
+
+            <section class="control-card" aria-labelledby="quality-title">
+              <div>
+                <h3 id="quality-title">Real-time Optimization</h3>
+                <p>Adjust export quality from 10% to 100%. Changes trigger a debounced local refresh.</p>
+              </div>
+              <div class="slider-row">
+                <input id="qualitySlider" type="range" min="10" max="100" step="1" value="80">
+                <div id="qualityValue" class="quality-chip">80%</div>
+              </div>
+              <div id="qualityHint" class="format-hint">WebP and JPEG deliver the strongest file-size reductions.</div>
+            </section>
+
+            <section class="control-card" aria-labelledby="format-title">
+              <div>
+                <h3 id="format-title">Format Conversion</h3>
+                <p>Choose whether to keep the original format or re-export as WebP or JPEG.</p>
+              </div>
+              <div class="format-buttons" role="group" aria-label="Choose export format">
+                <button class="format-button is-active" data-format="keep" type="button">Keep Original</button>
+                <button class="format-button" data-format="image/webp" type="button">WebP</button>
+                <button class="format-button" data-format="image/jpeg" type="button">JPEG</button>
+              </div>
+              <div class="file-meta">
+                <p>Active file: <span id="fileName" class="file-name">None</span></p>
+                <button id="swapFileButton" class="secondary-button" type="button">Choose Another Image</button>
+              </div>
+            </section>
+          </div>
+
+          <section class="status-card" aria-live="polite">
+            <div id="savingsBanner" class="savings-banner">Saved 0% of space (Reduced by 0 KB)!</div>
+            <div id="processingState" class="processing-state">Rebuilding your optimized preview locally...</div>
+          </section>
+
+          <div class="comparison-grid">
+            <section class="comparison-card" aria-labelledby="original-title">
+              <h3 id="original-title">Original</h3>
+              <div class="preview-frame">
+                <img id="originalPreview" alt="Original image preview">
+              </div>
+              <p id="originalSize" class="panel-stat">Original Size: -</p>
+            </section>
+
+            <section class="comparison-card" aria-labelledby="optimized-title">
+              <h3 id="optimized-title">Optimized</h3>
+              <div class="preview-frame">
+                <img id="optimizedPreview" alt="Optimized image preview">
+              </div>
+              <p id="optimizedSize" class="panel-stat">Optimized Size: -</p>
+            </section>
+          </div>
+
+          <div class="action-row">
+            <button id="downloadButton" class="primary-button download-button" type="button" disabled>Download Secure &amp; Optimized Image</button>
+            <p class="action-note">The export stays local. When possible, filenames are normalized as <strong><span id="downloadNamePreview">your_image_xyside_optimized.webp</span></strong>.</p>
+          </div>
+        </div>
+
+        <div class="feature-strip" aria-label="Feature summary">
+          <section class="feature-card">
+            <h3>Smart Dropzone</h3>
+            <p>Large drag surface, keyboard-accessible file picker, and a fast transition into the optimization console.</p>
+          </section>
+          <section class="feature-card">
+            <h3>EXIF Privacy Wiper</h3>
+            <p>Canvas redraw removes embedded metadata on export, covering GPS traces, camera details, and timestamps.</p>
+          </section>
+          <section class="feature-card">
+            <h3>One-Click Local Export</h3>
+            <p>Download the optimized Blob directly to disk with a predictable, conversion-aware XySide filename suffix.</p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div>&copy; 2026 XySide. All rights reserved.</div>
+      <div class="footer-links">
+        <a class="footer-link" href="https://xyside.com/">Home / Dashboard</a>
+        <a class="footer-link" href="https://xyside.com/privacy.html">Privacy Policy</a>
+        <a class="footer-link" href="https://xyside.com/terms.html">Terms of Service</a>
+      </div>
+    </footer>
+  </div>
+
+  <canvas id="hiddenCanvas" class="sr-only" aria-hidden="true"></canvas>
+
+  <script>
+    (() => {
+      const dropzone = document.getElementById("dropzone");
+      const studio = document.getElementById("studio");
+      const fileInput = document.getElementById("fileInput");
+      const selectButton = document.getElementById("selectButton");
+      const dropHintButton = document.getElementById("dropHintButton");
+      const swapFileButton = document.getElementById("swapFileButton");
+      const metadataToggle = document.getElementById("metadataToggle");
+      const qualitySlider = document.getElementById("qualitySlider");
+      const qualityValue = document.getElementById("qualityValue");
+      const qualityHint = document.getElementById("qualityHint");
+      const formatButtons = Array.from(document.querySelectorAll(".format-button"));
+      const fileName = document.getElementById("fileName");
+      const originalPreview = document.getElementById("originalPreview");
+      const optimizedPreview = document.getElementById("optimizedPreview");
+      const originalSize = document.getElementById("originalSize");
+      const optimizedSize = document.getElementById("optimizedSize");
+      const savingsBanner = document.getElementById("savingsBanner");
+      const processingState = document.getElementById("processingState");
+      const downloadButton = document.getElementById("downloadButton");
+      const downloadNamePreview = document.getElementById("downloadNamePreview");
+      const canvas = document.getElementById("hiddenCanvas");
+      const context = canvas.getContext("2d", { alpha: true });
+
+      const state = {
+        file: null,
+        originalDataUrl: "",
+        imageElement: null,
+        optimizedBlob: null,
+        optimizedPreviewUrl: "",
+        currentFormat: "keep",
+        renderToken: 0,
+        optimizeTimer: null
+      };
+
+      const MIME_EXTENSION = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp"
+      };
+
+      const ACCEPTED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+
+      function formatBytes(bytes) {
+        if (!Number.isFinite(bytes) || bytes <= 0) {
+          return "0 KB";
+        }
+
+        const units = ["B", "KB", "MB", "GB"];
+        const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+        const value = bytes / 1024 ** exponent;
+        return `${value.toFixed(exponent === 0 ? 0 : 2)} ${units[exponent]}`;
+      }
+
+      function sanitizeBaseName(name) {
+        const noExtension = name.replace(/\.[^.]+$/, "") || "image";
+        return noExtension
+          .normalize("NFKD")
+          .replace(/[^\w\s-]/g, "")
+          .trim()
+          .replace(/[\s_-]+/g, "_")
+          .replace(/^_+|_+$/g, "")
+          .toLowerCase() || "image";
+      }
+
+      function updateDownloadNamePreview() {
+        const extension = getOutputExtension();
+        const baseName = state.file ? sanitizeBaseName(state.file.name) : "your_image";
+        downloadNamePreview.textContent = `${baseName}_xyside_optimized.${extension}`;
+      }
+
+      function getTargetMimeType() {
+        if (!state.file) {
+          return "image/webp";
+        }
+
+        if (state.currentFormat === "keep") {
+          return ACCEPTED_TYPES.has(state.file.type) ? state.file.type : "image/png";
+        }
+
+        return state.currentFormat;
+      }
+
+      function getOutputExtension() {
+        return MIME_EXTENSION[getTargetMimeType()] || "png";
+      }
+
+      function setActiveFormat(nextFormat) {
+        state.currentFormat = nextFormat;
+        formatButtons.forEach((button) => {
+          button.classList.toggle("is-active", button.dataset.format === nextFormat);
+        });
+        updateFormatHint();
+        updateDownloadNamePreview();
+      }
+
+      function updateFormatHint() {
+        const mimeType = getTargetMimeType();
+        if (!state.file) {
+          qualityHint.textContent = "WebP and JPEG deliver the strongest file-size reductions.";
+          return;
+        }
+
+        if (mimeType === "image/png") {
+          qualityHint.textContent = "PNG prioritizes pixel fidelity. Switch to WebP or JPEG for deeper reductions.";
+        } else if (!metadataToggle.checked && state.currentFormat !== "keep") {
+          qualityHint.textContent = "Format conversion re-encodes the file locally. That process removes embedded metadata in most browsers.";
+        } else if (!metadataToggle.checked && Number(qualitySlider.value) < 100) {
+          qualityHint.textContent = "Reducing quality requires local re-encoding, so metadata may still be removed by browser export behavior.";
+        } else {
+          qualityHint.textContent = "WebP and JPEG deliver the strongest file-size reductions.";
+        }
+      }
+
+      function toggleProcessing(isProcessing) {
+        processingState.classList.toggle("is-visible", isProcessing);
+      }
+
+      function clearObjectUrl() {
+        if (state.optimizedPreviewUrl) {
+          URL.revokeObjectURL(state.optimizedPreviewUrl);
+          state.optimizedPreviewUrl = "";
+        }
+      }
+
+      function updateSavingsBanner(originalBytes, optimizedBytes) {
+        const bytesSaved = originalBytes - optimizedBytes;
+        const percentSaved = originalBytes > 0 ? (bytesSaved / originalBytes) * 100 : 0;
+
+        if (bytesSaved >= 0) {
+          savingsBanner.classList.remove("is-neutral");
+          savingsBanner.textContent = `Saved ${percentSaved.toFixed(1)}% of space (Reduced by ${formatBytes(bytesSaved)})!`;
+          return;
+        }
+
+        savingsBanner.classList.add("is-neutral");
+        savingsBanner.textContent = `Privacy-clean output is ${Math.abs(percentSaved).toFixed(1)}% larger (${formatBytes(Math.abs(bytesSaved))} added).`;
+      }
+
+      function toBlobPromise(targetCanvas, mimeType, quality) {
+        return new Promise((resolve, reject) => {
+          targetCanvas.toBlob((blob) => {
+            if (!blob) {
+              reject(new Error("Canvas export failed."));
+              return;
+            }
+            resolve(blob);
+          }, mimeType, quality);
+        });
+      }
+
+      function scheduleOptimize(immediate = false) {
+        if (!state.file || !state.imageElement) {
+          return;
+        }
+
+        clearTimeout(state.optimizeTimer);
+
+        const run = () => {
+          void optimizeCurrentImage();
+        };
+
+        if (immediate) {
+          run();
+          return;
+        }
+
+        state.optimizeTimer = window.setTimeout(run, 180);
+      }
+
+      async function optimizeCurrentImage() {
+        if (!state.file || !state.imageElement) {
+          return;
+        }
+
+        const token = ++state.renderToken;
+        const targetMime = getTargetMimeType();
+        const quality = Number(qualitySlider.value) / 100;
+        const needsUntouchedOriginal =
+          !metadataToggle.checked &&
+          state.currentFormat === "keep" &&
+          Number(qualitySlider.value) === 100;
+
+        toggleProcessing(true);
+        downloadButton.disabled = true;
+        updateFormatHint();
+
+        try {
+          let blob;
+
+          if (needsUntouchedOriginal) {
+            blob = state.file;
+          } else {
+            canvas.width = state.imageElement.naturalWidth;
+            canvas.height = state.imageElement.naturalHeight;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (targetMime === "image/jpeg") {
+              context.fillStyle = "#ffffff";
+              context.fillRect(0, 0, canvas.width, canvas.height);
+            }
+
+            context.drawImage(state.imageElement, 0, 0, canvas.width, canvas.height);
+            blob = await toBlobPromise(canvas, targetMime, quality);
+          }
+
+          if (token !== state.renderToken) {
+            return;
+          }
+
+          clearObjectUrl();
+          state.optimizedBlob = blob;
+          if (blob === state.file) {
+            optimizedPreview.src = state.originalDataUrl;
+          } else {
+            state.optimizedPreviewUrl = URL.createObjectURL(blob);
+            optimizedPreview.src = state.optimizedPreviewUrl;
+          }
+
+          optimizedSize.textContent = `Optimized Size: ${formatBytes(blob.size)}`;
+          updateSavingsBanner(state.file.size, blob.size);
+          updateDownloadNamePreview();
+          downloadButton.disabled = false;
+        } catch (error) {
+          savingsBanner.classList.add("is-neutral");
+          savingsBanner.textContent = "Local optimization failed in this browser. Try a different format or source file.";
+          downloadButton.disabled = true;
+          console.error(error);
+        } finally {
+          if (token === state.renderToken) {
+            toggleProcessing(false);
+          }
+        }
+      }
+
+      function revealStudio() {
+        dropzone.classList.add("hidden");
+        studio.classList.remove("hidden");
+      }
+
+      function loadSelectedFile(file) {
+        if (!file || !ACCEPTED_TYPES.has(file.type)) {
+          window.alert("Please choose a PNG, JPG, or WebP image.");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          const image = new Image();
+          image.onload = () => {
+            state.file = file;
+            state.originalDataUrl = reader.result;
+            state.imageElement = image;
+            originalPreview.src = state.originalDataUrl;
+            originalSize.textContent = `Original Size: ${formatBytes(file.size)}`;
+            fileName.textContent = file.name;
+            revealStudio();
+            setActiveFormat(state.currentFormat);
+            scheduleOptimize(true);
+          };
+          image.onerror = () => {
+            window.alert("This image could not be decoded in the current browser.");
+          };
+          image.src = reader.result;
+        };
+        reader.onerror = () => {
+          window.alert("The selected image could not be read from disk.");
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function openFilePicker() {
+        fileInput.value = "";
+        fileInput.click();
+      }
+
+      function handleFiles(fileList) {
+        const [file] = Array.from(fileList || []);
+        if (file) {
+          loadSelectedFile(file);
+        }
+      }
+
+      function handleDragState(event, isActive) {
+        event.preventDefault();
+        event.stopPropagation();
+        dropzone.classList.toggle("dragover", isActive);
+      }
+
+      async function downloadOptimizedImage() {
+        if (!state.optimizedBlob || !state.file) {
+          return;
+        }
+
+        const blobUrl = URL.createObjectURL(state.optimizedBlob);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = `${sanitizeBaseName(state.file.name)}_xyside_optimized.${getOutputExtension()}`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(blobUrl);
+      }
+
+      dropzone.addEventListener("click", (event) => {
+        const target = event.target;
+        if (target instanceof HTMLElement && target.closest("button")) {
+          return;
+        }
+        openFilePicker();
+      });
+
+      dropzone.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openFilePicker();
+        }
+      });
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (event) => handleDragState(event, true));
+      });
+
+      ["dragleave", "dragend"].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (event) => handleDragState(event, false));
+      });
+
+      dropzone.addEventListener("drop", (event) => {
+        handleDragState(event, false);
+        handleFiles(event.dataTransfer.files);
+      });
+
+      selectButton.addEventListener("click", openFilePicker);
+      dropHintButton.addEventListener("click", openFilePicker);
+      swapFileButton.addEventListener("click", openFilePicker);
+      fileInput.addEventListener("change", () => handleFiles(fileInput.files));
+      metadataToggle.addEventListener("change", () => {
+        updateFormatHint();
+        scheduleOptimize();
+      });
+      qualitySlider.addEventListener("input", () => {
+        qualityValue.textContent = `${qualitySlider.value}%`;
+        updateFormatHint();
+        scheduleOptimize();
+      });
+
+      formatButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          setActiveFormat(button.dataset.format);
+          scheduleOptimize();
+        });
+      });
+
+      downloadButton.addEventListener("click", () => {
+        void downloadOptimizedImage();
+      });
+
+      qualityValue.textContent = `${qualitySlider.value}%`;
+      setActiveFormat("keep");
+
+      window.addEventListener("beforeunload", clearObjectUrl);
+    })();
+  </script>
+</body>
+</html>
