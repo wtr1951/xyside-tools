@@ -120,6 +120,13 @@
       outline: none;
     }
 
+    .nav-link[aria-current="page"] {
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--blue), var(--blue-deep));
+      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.2);
+      font-weight: 800;
+    }
+
     .hero {
       display: grid;
       grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
@@ -320,11 +327,11 @@
       overflow: hidden;
       min-height: 320px;
       padding: 28px;
-      border-style: dashed;
+      border-style: solid;
       display: grid;
       place-items: center;
       text-align: center;
-      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition), opacity var(--transition);
+      transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease, opacity 220ms ease, background 220ms ease;
     }
 
     .dropzone::before {
@@ -334,12 +341,54 @@
       border-radius: 26px;
       background: linear-gradient(180deg, rgba(37, 99, 235, 0.03), rgba(37, 99, 235, 0.01));
       pointer-events: none;
+      transition: inset 260ms cubic-bezier(0.22, 1, 0.36, 1), background 260ms ease, opacity 260ms ease;
     }
 
+    .dropzone::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px dashed rgba(37, 99, 235, 0.28);
+      border-radius: 24px;
+      pointer-events: none;
+      transition: inset 260ms cubic-bezier(0.22, 1, 0.36, 1), border-color 260ms ease, opacity 260ms ease;
+      animation: dashPulse 2.4s ease-in-out infinite;
+    }
+
+    .dropzone:hover,
+    .dropzone:focus-visible,
     .dropzone.dragover {
-      transform: translateY(-2px) scale(1.004);
-      border-color: rgba(37, 99, 235, 0.45);
-      box-shadow: 0 30px 60px rgba(37, 99, 235, 0.16);
+      transform: translateY(-2px) scale(0.996);
+      border-color: rgba(37, 99, 235, 0.5);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(239, 246, 255, 0.88));
+      box-shadow: 0 30px 64px rgba(37, 99, 235, 0.18), inset 0 0 36px rgba(37, 99, 235, 0.06);
+      outline: none;
+    }
+
+    .dropzone:hover::before,
+    .dropzone:focus-visible::before,
+    .dropzone.dragover::before {
+      inset: 32px;
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(96, 165, 250, 0.05));
+    }
+
+    .dropzone:hover::after,
+    .dropzone:focus-visible::after,
+    .dropzone.dragover::after {
+      inset: 30px;
+      border-color: rgba(37, 99, 235, 0.72);
+      animation-duration: 1.1s;
+    }
+
+    @keyframes dashPulse {
+      0%, 100% {
+        opacity: 0.64;
+        box-shadow: inset 0 0 0 rgba(37, 99, 235, 0);
+      }
+      50% {
+        opacity: 1;
+        box-shadow: inset 0 0 28px rgba(37, 99, 235, 0.08);
+      }
     }
 
     .dropzone.hidden,
@@ -649,6 +698,41 @@
       gap: 16px;
     }
 
+    .comparison-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .size-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(148, 163, 184, 0.12);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      font-size: 0.78rem;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .size-badge.good {
+      color: #047857;
+      background: rgba(5, 150, 105, 0.12);
+      border-color: rgba(5, 150, 105, 0.2);
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.12);
+    }
+
+    .size-badge.warn {
+      color: #b45309;
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
     .preview-frame {
       min-height: 320px;
       border-radius: 22px;
@@ -838,9 +922,11 @@
         <span>XySide Smart Image Compressor &amp; EXIF Wiper</span>
       </a>
       <nav class="site-nav" aria-label="Main navigation">
-        <a class="nav-link" href="https://xyside.com/">Home / Dashboard</a>
-        <a class="nav-link" href="https://xyside.com/privacy.html">Privacy Policy</a>
-        <a class="nav-link" href="https://xyside.com/terms.html">Terms of Service</a>
+        <a class="nav-link" href="https://xyside.com/">Hub Home</a>
+        <a class="nav-link" href="https://xyside.com/blog/">Blog</a>
+        <a class="nav-link" href="https://calc.xyside.com/">📊 Tax Calculator</a>
+        <a class="nav-link" href="https://tools.xyside.com/" aria-current="page">🛠 Image Optimizer</a>
+        <a class="nav-link" href="https://ai.xyside.com/">🧠 AI Prompt Studio</a>
       </nav>
     </header>
 
@@ -985,7 +1071,10 @@
 
           <div class="comparison-grid">
             <section class="comparison-card" aria-labelledby="original-title">
-              <h3 id="original-title">Original</h3>
+              <div class="comparison-card-top">
+                <h3 id="original-title">Original</h3>
+                <span id="originalBadge" class="size-badge">Baseline</span>
+              </div>
               <div class="preview-frame">
                 <img id="originalPreview" alt="Original image preview">
               </div>
@@ -993,7 +1082,10 @@
             </section>
 
             <section class="comparison-card" aria-labelledby="optimized-title">
-              <h3 id="optimized-title">Optimized</h3>
+              <div class="comparison-card-top">
+                <h3 id="optimized-title">Optimized</h3>
+                <span id="optimizedBadge" class="size-badge">Awaiting file</span>
+              </div>
               <div class="preview-frame">
                 <img id="optimizedPreview" alt="Optimized image preview">
               </div>
@@ -1027,7 +1119,11 @@
     <footer class="site-footer">
       <div>&copy; 2026 XySide. All rights reserved.</div>
       <div class="footer-links">
-        <a class="footer-link" href="https://xyside.com/">Home / Dashboard</a>
+        <a class="footer-link" href="https://xyside.com/">Hub Home</a>
+        <a class="footer-link" href="https://xyside.com/blog/">Blog</a>
+        <a class="footer-link" href="https://calc.xyside.com/">📊 Tax Calculator</a>
+        <a class="footer-link" href="https://tools.xyside.com/" aria-current="page">🛠 Image Optimizer</a>
+        <a class="footer-link" href="https://ai.xyside.com/">🧠 AI Prompt Studio</a>
         <a class="footer-link" href="https://xyside.com/privacy.html">Privacy Policy</a>
         <a class="footer-link" href="https://xyside.com/terms.html">Terms of Service</a>
       </div>
@@ -1054,6 +1150,8 @@
       const optimizedPreview = document.getElementById("optimizedPreview");
       const originalSize = document.getElementById("originalSize");
       const optimizedSize = document.getElementById("optimizedSize");
+      const originalBadge = document.getElementById("originalBadge");
+      const optimizedBadge = document.getElementById("optimizedBadge");
       const savingsBanner = document.getElementById("savingsBanner");
       const processingState = document.getElementById("processingState");
       const downloadButton = document.getElementById("downloadButton");
@@ -1169,11 +1267,15 @@
         if (bytesSaved >= 0) {
           savingsBanner.classList.remove("is-neutral");
           savingsBanner.textContent = `Saved ${percentSaved.toFixed(1)}% of space (Reduced by ${formatBytes(bytesSaved)})!`;
+          optimizedBadge.className = "size-badge good";
+          optimizedBadge.textContent = `-${percentSaved.toFixed(1)}%`;
           return;
         }
 
         savingsBanner.classList.add("is-neutral");
         savingsBanner.textContent = `Privacy-clean output is ${Math.abs(percentSaved).toFixed(1)}% larger (${formatBytes(Math.abs(bytesSaved))} added).`;
+        optimizedBadge.className = "size-badge warn";
+        optimizedBadge.textContent = `+${Math.abs(percentSaved).toFixed(1)}%`;
       }
 
       function toBlobPromise(targetCanvas, mimeType, quality) {
@@ -1292,6 +1394,10 @@
             state.imageElement = image;
             originalPreview.src = state.originalDataUrl;
             originalSize.textContent = `Original Size: ${formatBytes(file.size)}`;
+            originalBadge.className = "size-badge";
+            originalBadge.textContent = "Baseline";
+            optimizedBadge.className = "size-badge";
+            optimizedBadge.textContent = "Rebuilding";
             fileName.textContent = file.name;
             revealStudio();
             setActiveFormat(state.currentFormat);
